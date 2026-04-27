@@ -147,7 +147,7 @@ const Navbar = () => {
                         {menuLinks.map((link, i) => (
                             <div key={i} className="flex items-center justify-between py-1">
                                 <Link to={link.path} onClick={() => setOpen(false)}
-                                     className="text-gray-700 font-medium hover:text-primary transition-colors">
+                                    className="text-gray-700 font-medium hover:text-primary transition-colors">
                                     {link.name}
                                 </Link>
                             </div>

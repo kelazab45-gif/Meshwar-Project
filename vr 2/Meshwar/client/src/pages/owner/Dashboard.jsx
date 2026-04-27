@@ -7,7 +7,7 @@ import { motion } from 'motion/react'
 
 const Dashboard = () => {
 
-  const {axios, isOwner, currency} = useAppContext()
+  const { axios, isOwner, isPremium, user, currency } = useAppContext()
 
   const [data, setData] = useState({
     totalCars: 0,
@@ -18,24 +18,27 @@ const Dashboard = () => {
     monthlyRevenue: 0,
   })
 
-  const fetchDashboardData = async ()=>{
+  const fetchDashboardData = async () => {
     try {
-       const { data: apiData } = await axios.get('/api/owner/dashboard')
-       if (apiData.success){
+      const { data: apiData } = await axios.get('/api/owner/dashboard')
+      if (apiData.success) {
         setData(apiData.dashboardData)
-       }else{
+      } else {
         toast.error(apiData.message)
-       }
+      }
     } catch (error) {
-      toast.error(error.message)
+      // Don't show toast for 401/403 during initial load transitions
+      if (error.response?.status !== 401 && error.response?.status !== 403) {
+        toast.error(error.message)
+      }
     }
   }
 
-  useEffect(()=>{
-    if(isOwner){
+  useEffect(() => {
+    if (user && (isOwner || isPremium || user.isPremium)) {
       fetchDashboardData()
     }
-  },[isOwner])
+  }, [user, isOwner, isPremium])
 
   const statCards = [
     {

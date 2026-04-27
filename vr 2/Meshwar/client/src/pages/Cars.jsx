@@ -22,7 +22,7 @@ const Cars = () => {
 
   const [input, setInput] = useState('')
   const [showFilters, setShowFilters] = useState(false)
-  
+
   // Permanent Filter State
   const [selectedCategory, setSelectedCategory] = useState('All')
   const [selectedTransmission, setSelectedTransmission] = useState('All')
@@ -42,7 +42,7 @@ const Cars = () => {
   const uniqueLocations = Array.isArray(cars) ? [...new Set(cars.map(car => car.location))].filter(Boolean).sort() : []
 
   const applyFilter = async () => {
-     
+
     // Always start from the base set (either all cars or search results)
     let tempCars = baseCars.length > 0 ? baseCars.slice() : cars.slice()
 
@@ -99,24 +99,24 @@ const Cars = () => {
 
   const searchCarAvailablity = async () => {
     try {
-        const { data } = await axios.post('/api/bookings/check-availability', { location: pickupLocation, pickupDate, returnDate })
-        if (data.success) {
-          setBaseCars(data.availableCars)
-          if (data.availableCars.length === 0) {
-            toast('No cars available for these dates. Showing all cars instead.')
-            setBaseCars(cars)
-          }
+      const { data } = await axios.post('/api/bookings/check-availability', { location: pickupLocation, pickupDate, returnDate })
+      if (data.success) {
+        setBaseCars(data.availableCars)
+        if (data.availableCars.length === 0) {
+          toast('No cars available for these dates. Showing all cars instead.')
+          setBaseCars(cars)
         }
+      }
     } catch (error) {
-        setBaseCars(cars)
+      setBaseCars(cars)
     }
   }
 
   useEffect(() => {
     if (isSearchData) {
-        searchCarAvailablity()
+      searchCarAvailablity()
     } else if (cars.length > 0) {
-        setBaseCars(cars)
+      setBaseCars(cars)
     }
   }, [cars, isSearchData])
 
@@ -128,7 +128,7 @@ const Cars = () => {
 
   useEffect(() => {
     if (cars.length > 0) {
-        applyFilter()
+      applyFilter()
     }
   }, [input, selectedCategory, selectedTransmission, selectedLocation, maxPrice, baseCars]);
 

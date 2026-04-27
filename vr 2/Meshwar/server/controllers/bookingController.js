@@ -144,7 +144,7 @@ export const getUserBookings = async (req, res) => {
 export const getOwnerBookings = async (req, res) => {
     try {
         await autoCancelExpiredBookings();
-        if (req.user.role !== 'owner') {
+        if (req.user.role !== 'owner' && !req.user.isPremium) {
             return res.json({ success: false, message: "Unauthorized" })
         }
         const bookings = await Booking.find({ owner: req.user._id }).populate('car user').select("-user.password").sort({ createdAt: -1 })

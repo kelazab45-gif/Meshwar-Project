@@ -7,17 +7,29 @@ import { assets } from '../../assets/assets'
 
 const ManageBookings = () => {
 
-  const { currency, axios } = useAppContext()
+  const { currency, axios, user, isOwner, isPremium } = useAppContext()
   const [bookings, setBookings] = useState([])
 
   const fetchOwnerBookings = async ()=>{
     try {
       const { data } = await axios.get('/api/bookings/owner')
-      data.success ? setBookings(data.bookings || []) : toast.error(data.message)
+      if (data.success) {
+        setBookings(data.bookings || [])
+      } else if (data.message !== "Unauthorized") {
+        toast.error(data.message)
+      }
     } catch (error) {
-      toast.error(error.message)
+      if (error.response?.status !== 401) {
+        toast.error(error.message)
+      }
     }
   }
+
+  useEffect(()=>{
+    if (user && (isOwner || isPremium || user.isPremium)) {
+      fetchOwnerBookings()
+    }
+  },[user, isOwner, isPremium])
 
   const changeBookingStatus = async (bookingId, status)=>{
     try {

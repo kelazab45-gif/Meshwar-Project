@@ -163,7 +163,7 @@ export const getDashboardData = async (req, res) => {
     try {
         const { _id, role } = req.user;
 
-        if (role !== 'owner') {
+        if (role !== 'owner' && !req.user.isPremium) {
             return res.json({ success: false, message: "Unauthorized" });
         }
 

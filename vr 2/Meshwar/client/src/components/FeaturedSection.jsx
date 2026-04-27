@@ -9,7 +9,7 @@ import { motion } from 'motion/react'
 const FeaturedSection = () => {
 
     const navigate = useNavigate()
-    const {cars} = useAppContext()
+    const { cars } = useAppContext()
 
     return (
         <section className='flex flex-col items-center py-24 px-6 md:px-16 lg:px-24 xl:px-32 bg-white relative overflow-hidden'>

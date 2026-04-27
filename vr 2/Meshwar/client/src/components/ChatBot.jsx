@@ -274,14 +274,14 @@ const css = `
 const ChatBot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');
-  
+
   // Sessions state for multiple chats
   const [sessions, setSessions] = useState(() => {
     try {
       const saved = localStorage.getItem('carRentalChatSessions');
       if (saved) {
-         const parsed = JSON.parse(saved);
-         if (parsed.length > 0) return parsed;
+        const parsed = JSON.parse(saved);
+        if (parsed.length > 0) return parsed;
       }
       return [{ id: Date.now().toString(), title: 'New Chat', messages: [], date: new Date().toLocaleDateString() }];
     } catch {
@@ -305,13 +305,13 @@ const ChatBot = () => {
   const conversation = activeSession?.messages || [];
 
   useEffect(() => { loadQuickActions(); }, []);
-  
-  useEffect(() => { 
+
+  useEffect(() => {
     if (!showHistory) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); 
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
   }, [conversation, showTyping, showHistory]);
-  
+
   // Save sessions to local storage whenever it changes
   useEffect(() => {
     localStorage.setItem('carRentalChatSessions', JSON.stringify(sessions));
@@ -321,7 +321,7 @@ const ChatBot = () => {
     try {
       const res = await axios.get(`${API_URL}/api/chatbot/quick-actions`);
       if (res.data.success) setQuickActions(res.data.quickActions);
-    } catch {}
+    } catch { }
   };
 
   const createNewChat = () => {
@@ -406,8 +406,8 @@ const ChatBot = () => {
         {!isOpen && <span className="cb-ring" />}
         {!isOpen && <span className="cb-badge" />}
         {isOpen
-          ? <svg width="22" height="22" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round"><line x1="5" y1="5" x2="17" y2="17"/><line x1="17" y1="5" x2="5" y2="17"/></svg>
-          : <svg width="24" height="24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          ? <svg width="22" height="22" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round"><line x1="5" y1="5" x2="17" y2="17" /><line x1="17" y1="5" x2="5" y2="17" /></svg>
+          : <svg width="24" height="24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" /></svg>
         }
       </button>
 
@@ -416,7 +416,7 @@ const ChatBot = () => {
         <div className="cb-window">
           {/* Header */}
           <div className="cb-header">
-            <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               <div className="cb-avatar">🚗</div>
               <div>
                 <div className="cb-title">CarRental Assistant</div>
@@ -426,40 +426,40 @@ const ChatBot = () => {
                 </div>
               </div>
             </div>
-            <div style={{display:'flex', gap:'8px'}}>
-               <button className="cb-reset" onClick={() => setShowHistory(!showHistory)} title={showHistory ? "Back to Chat" : "Chat History"}>
-                 {showHistory ? (
-                   <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                 ) : (
-                   <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-                 )}
-               </button>
-               {!showHistory && (
-                 <button className="cb-reset" onClick={createNewChat} title="Start a New Chat">
-                   <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" viewBox="0 0 24 24">
-                     <line x1="12" y1="5" x2="12" y2="19"></line>
-                     <line x1="5" y1="12" x2="19" y2="12"></line>
-                   </svg>
-                 </button>
-               )}
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button className="cb-reset" onClick={() => setShowHistory(!showHistory)} title={showHistory ? "Back to Chat" : "Chat History"}>
+                {showHistory ? (
+                  <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+                ) : (
+                  <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                )}
+              </button>
+              {!showHistory && (
+                <button className="cb-reset" onClick={createNewChat} title="Start a New Chat">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" viewBox="0 0 24 24">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                </button>
+              )}
             </div>
           </div>
 
           {showHistory ? (
-             /* History View */
-             <div className="cb-history-view">
-                {sessions.map(s => (
-                   <div key={s.id} className={`cb-history-item ${activeSessionId === s.id ? 'active' : ''}`} onClick={() => { setActiveSessionId(s.id); setShowHistory(false); }}>
-                      <div style={{flex: 1, minWidth: 0, paddingRight: '12px'}}>
-                         <div className="cb-history-title">{s.title}</div>
-                         <div className="cb-history-meta">{s.messages.length} {s.messages.length === 1 ? 'message' : 'messages'} • {s.date}</div>
-                      </div>
-                      <button className="cb-history-delete" onClick={(e) => deleteChat(e, s.id)} title="Delete Chat">
-                         <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                      </button>
-                   </div>
-                ))}
-             </div>
+            /* History View */
+            <div className="cb-history-view">
+              {sessions.map(s => (
+                <div key={s.id} className={`cb-history-item ${activeSessionId === s.id ? 'active' : ''}`} onClick={() => { setActiveSessionId(s.id); setShowHistory(false); }}>
+                  <div style={{ flex: 1, minWidth: 0, paddingRight: '12px' }}>
+                    <div className="cb-history-title">{s.title}</div>
+                    <div className="cb-history-meta">{s.messages.length} {s.messages.length === 1 ? 'message' : 'messages'} • {s.date}</div>
+                  </div>
+                  <button className="cb-history-delete" onClick={(e) => deleteChat(e, s.id)} title="Delete Chat">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                  </button>
+                </div>
+              ))}
+            </div>
           ) : (
             /* Messages View */
             <>
@@ -469,7 +469,7 @@ const ChatBot = () => {
                     <div className="cb-welcome">
                       <div className="cb-welcome-icon">🚗</div>
                       <h4>Hey there! 👋</h4>
-                      <p>I'm your AI car rental assistant.<br/>How can I help you today?</p>
+                      <p>I'm your AI car rental assistant.<br />How can I help you today?</p>
                     </div>
                     {quickActions.length > 0 && (
                       <div className="cb-chips">
@@ -521,8 +521,8 @@ const ChatBot = () => {
                   />
                   <button className="cb-send" onClick={() => handleSendMessage()} disabled={isLoading || !message.trim()}>
                     {isLoading
-                      ? <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" style={{animation:'cb-grad 1s linear infinite'}}/></svg>
-                      : <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                      ? <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" style={{ animation: 'cb-grad 1s linear infinite' }} /></svg>
+                      : <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" /></svg>
                     }
                   </button>
                 </div>

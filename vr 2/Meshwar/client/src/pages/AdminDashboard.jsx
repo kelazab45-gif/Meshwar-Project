@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useOutletContext } from 'react-router-dom';
+import { assets } from '../assets/assets';
 
 const DashboardIcon = () => (<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>);
 const UsersIcon = () => (<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 01-9-3.812" /></svg>);
@@ -9,6 +10,7 @@ const BookingIcon = () => (<svg className="w-5 h-5" fill="none" stroke="currentC
 const SettingsIcon = () => (<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>);
 
 const AdminDashboard = () => {
+  const { handleAdminLogout } = useOutletContext() || {};
   const [stats, setStats] = useState({
     totalUsers: 0, totalCars: 0, totalBookings: 0, totalRevenue: 0, monthlyRevenue: 0, recentBookings: []
   });
@@ -45,9 +47,8 @@ const AdminDashboard = () => {
     setIsModalOpen(true);
   };
 
-  const navLinkClass = ({ isActive }) => 
-    `flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition ${
-      isActive ? 'bg-green-50 text-green-700 font-medium' : 'text-gray-700 hover:bg-gray-50'
+  const navLinkClass = ({ isActive }) =>
+    `flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition ${isActive ? 'bg-green-50 text-green-700 font-medium' : 'text-gray-700 hover:bg-gray-50'
     }`;
 
   return (
@@ -55,32 +56,32 @@ const AdminDashboard = () => {
       <aside className="w-64 bg-white border-r border-gray-100 p-6 flex flex-col">
         <div className="flex flex-col items-center mb-10">
           <div className="relative">
-            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Admin" className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-lg"/>
+            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Admin" className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-lg" />
             <span className="absolute bottom-1 right-1 block h-4 w-4 rounded-full ring-2 ring-white bg-green-500" />
           </div>
           <h2 className="text-xl font-semibold mt-3 text-gray-800">Admin</h2>
           <span className="px-3 py-1 bg-green-50 text-green-600 rounded-full text-xs font-medium uppercase mt-1">Super Admin</span>
         </div>
-        
+
         <nav className="flex-1 space-y-1">
           <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4 px-4">MAIN MENU</p>
-          
+
           <NavLink to="/admin" end className={navLinkClass}>
             <DashboardIcon /><span>Overview</span>
           </NavLink>
-          
+
           <NavLink to="/admin/users" className={navLinkClass}>
             <UsersIcon /><span>Manage Users</span>
           </NavLink>
-          
+
           <NavLink to="/admin/cars" className={navLinkClass}>
             <CarIcon /><span>Manage All Cars</span>
           </NavLink>
-          
+
           <NavLink to="/admin/bookings" className={navLinkClass}>
             <BookingIcon /><span>Total Bookings</span>
           </NavLink>
-          
+
           <NavLink to="/admin/settings" className={navLinkClass}>
             <SettingsIcon /><span>System Settings</span>
           </NavLink>
@@ -89,8 +90,16 @@ const AdminDashboard = () => {
 
       <div className="flex-1 flex flex-col">
         <header className="h-16 bg-white border-b border-gray-100 px-8 flex items-center justify-between">
-          <span className="text-2xl font-bold text-green-600">MESH<span className="text-gray-800">WAR</span></span>
-          <div className="text-sm text-gray-600">Welcome, <span className="font-medium text-gray-800">Admin</span></div>
+          <img src={assets.logo} alt="Meshwar Logo" className="h-8 md:h-10 w-auto object-contain" />
+          <div className="flex items-center gap-4 text-sm text-gray-600">
+            <span>Welcome, <span className="font-medium text-gray-800">Admin</span></span>
+            <button
+              onClick={handleAdminLogout}
+              className="px-3 py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium text-xs"
+            >
+              Sign Out
+            </button>
+          </div>
         </header>
 
         <main className="flex-1 p-8 overflow-y-auto">
@@ -123,7 +132,7 @@ const AdminDashboard = () => {
               <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
                 <h3 className="text-lg font-semibold text-gray-800">Recent Global Bookings</h3>
                 <div className="flex gap-2 w-full sm:w-auto">
-                  <input type="text" placeholder="Search ID..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full sm:w-48 px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-green-500"/>
+                  <input type="text" placeholder="Search ID..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full sm:w-48 px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-green-500" />
                   <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="w-full sm:w-36 px-3 py-2 border rounded-lg text-sm">
                     <option value="all">All Status</option>
                     <option value="pending">Pending</option>
@@ -132,7 +141,7 @@ const AdminDashboard = () => {
                   </select>
                 </div>
               </div>
-              
+
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm text-gray-600">
                   <thead className="bg-gray-50 text-gray-700">
@@ -148,10 +157,9 @@ const AdminDashboard = () => {
                       <tr key={booking._id} className="border-b border-gray-50 hover:bg-gray-50 transition">
                         <td className="px-4 py-3 font-medium text-gray-900">#{booking._id?.substring(0, 6)}</td>
                         <td className="px-4 py-3">
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            booking.status === 'confirmed' ? 'bg-green-100 text-green-700' : 
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${booking.status === 'confirmed' ? 'bg-green-100 text-green-700' :
                             booking.status === 'cancelled' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'
-                          }`}>
+                            }`}>
                             {booking.status}
                           </span>
                         </td>
@@ -167,11 +175,11 @@ const AdminDashboard = () => {
             </div>
 
             <div className="col-span-1 bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex flex-col justify-center items-center text-center">
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">Financials</h3>
-                <div className="w-16 h-16 rounded-full bg-green-50 text-green-500 flex items-center justify-center mb-4 text-3xl font-bold">$</div>
-                <p className="text-xs text-gray-400 uppercase tracking-wider">MONTHLY EARNINGS</p>
-                <p className="text-5xl font-extrabold text-gray-900 mt-2 mb-2">{loading ? '...' : (stats.monthlyRevenue || 0).toLocaleString()}</p>
-                <p className="text-lg font-semibold text-gray-700">EGP</p>
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">Financials</h3>
+              <div className="w-16 h-16 rounded-full bg-green-50 text-green-500 flex items-center justify-center mb-4 text-3xl font-bold">$</div>
+              <p className="text-xs text-gray-400 uppercase tracking-wider">MONTHLY EARNINGS</p>
+              <p className="text-5xl font-extrabold text-gray-900 mt-2 mb-2">{loading ? '...' : (stats.monthlyRevenue || 0).toLocaleString()}</p>
+              <p className="text-lg font-semibold text-gray-700">EGP</p>
             </div>
           </div>
         </main>

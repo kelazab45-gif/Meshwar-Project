@@ -38,13 +38,13 @@ const Testimonial = () => {
 
     return (
         <section className="py-28 px-6 md:px-16 lg:px-24 xl:px-44 bg-slate-50 relative overflow-hidden">
-            
+
             {/* Artistic Background Elements */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
                 <div className="absolute -top-32 -right-32 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse duration-[8000ms]" />
                 <div className="absolute top-1/2 -left-32 w-80 h-80 bg-blue-400/10 rounded-full blur-3xl" />
                 <div className="absolute -bottom-40 left-1/3 w-[30rem] h-[30rem] bg-teal-400/5 rounded-full blur-3xl" />
-                
+
                 {/* Subtle Grid Pattern */}
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.02)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_10%,transparent_100%)]" />
             </div>
@@ -72,7 +72,7 @@ const Testimonial = () => {
                     >
                         {/* Decorative gradient blob inside the card */}
                         <div className="absolute -bottom-12 -right-12 w-32 h-32 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-all duration-500" />
-                        
+
                         {/* Quote mark */}
                         <span className="absolute bottom-2 right-6 text-8xl text-primary/5 font-serif leading-none select-none group-hover:text-primary/10 transition-colors duration-500 group-hover:-translate-y-2 transform origin-bottom">"</span>
 
@@ -88,10 +88,10 @@ const Testimonial = () => {
                                 {/* Stars under location */}
                                 <div className="flex items-center gap-1 mt-2">
                                     {Array(t.rating).fill(0).map((_, i) => (
-                                        <motion.img 
-                                            key={i} 
-                                            src={assets.star_icon} 
-                                            alt="star" 
+                                        <motion.img
+                                            key={i}
+                                            src={assets.star_icon}
+                                            alt="star"
                                             className="w-3.5 h-3.5 drop-shadow-sm"
                                             initial={{ opacity: 0, scale: 0 }}
                                             whileInView={{ opacity: 1, scale: 1 }}

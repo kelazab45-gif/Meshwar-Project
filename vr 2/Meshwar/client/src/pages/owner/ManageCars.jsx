@@ -6,7 +6,7 @@ import { motion } from 'motion/react'
 
 const ManageCars = () => {
 
-  const {isOwner, axios, currency, fetchCars} = useAppContext()
+  const {isOwner, isPremium, user, axios, currency, fetchCars} = useAppContext()
   const [cars, setCars] = useState([])
   
   // Edit State
@@ -105,8 +105,10 @@ const ManageCars = () => {
   }
 
   useEffect(()=>{
-    isOwner && fetchOwnerCars()
-  },[isOwner])
+    if (user && (isOwner || isPremium || user.isPremium)) {
+      fetchOwnerCars()
+    }
+  },[user, isOwner, isPremium])
 
   return (
     <div className='px-4 pt-10 md:px-10 w-full min-h-screen bg-[#F9FAFB] pb-10 relative'>

@@ -8,14 +8,14 @@ const Newsletter = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!email) return;
-        
+
         setStatus('loading');
-        
+
         // Simulate network request for subscription
         setTimeout(() => {
             setStatus('success');
             setEmail('');
-            
+
             // Revert back to normal state after showing success message
             setTimeout(() => {
                 setStatus('idle');
@@ -37,7 +37,7 @@ const Newsletter = () => {
             <div className="relative flex flex-col items-center justify-center text-center px-6 md:px-16 py-16 gap-4">
 
                 {/* Icon */}
-                <motion.div 
+                <motion.div
                     key={status === 'success' ? 'success-icon' : 'mail-icon'}
                     initial={{ scale: 0.8, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
@@ -72,9 +72,9 @@ const Newsletter = () => {
                     transition={{ delay: 0.2, duration: 0.4 }}
                     className="text-gray-500 text-base max-w-md"
                 >
-                    {status === 'success' 
-                      ? "Thank you for subscribing! Keep an eye on your inbox for exclusive car rental discounts and offers." 
-                      : "Subscribe to get the latest offers, new arrivals, and exclusive discounts straight to your inbox."}
+                    {status === 'success'
+                        ? "Thank you for subscribing! Keep an eye on your inbox for exclusive car rental discounts and offers."
+                        : "Subscribe to get the latest offers, new arrivals, and exclusive discounts straight to your inbox."}
                 </motion.p>
 
                 <div className="w-full max-w-lg mt-2 min-h-[60px] flex justify-center">
@@ -134,10 +134,10 @@ const Newsletter = () => {
                 </div>
 
                 {status !== 'success' && (
-                    <motion.p 
+                    <motion.p
                         key="spam-notice"
-                        initial={{opacity: 0}} 
-                        animate={{opacity: 1}}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
                         transition={{ delay: 0.5 }}
                         className="text-xs text-gray-400 mt-1"
                     >
