@@ -4,55 +4,55 @@ import Car from "../models/Car.js";
 
 
 export const getDashboardStats = async (req, res) => {
-    try {
-        const totalUsers = await User.countDocuments();
-        const totalCars = await Car.countDocuments();
-        const totalBookings = await Booking.countDocuments();
+  try {
+    const totalUsers = await User.countDocuments();
+    const totalCars = await Car.countDocuments();
+    const totalBookings = await Booking.countDocuments();
 
-        const totalRevenueResult = await Booking.aggregate([
-            { $match: { status: "confirmed" } },
-            { $group: { _id: null, total: { $sum: "$price" } } }
-        ]);
-        const totalRevenue = totalRevenueResult.length > 0 ? totalRevenueResult[0].total : 0;
+    const totalRevenueResult = await Booking.aggregate([
+      { $match: { status: "confirmed" } },
+      { $group: { _id: null, total: { $sum: "$price" } } }
+    ]);
+    const totalRevenue = totalRevenueResult.length > 0 ? totalRevenueResult[0].total : 0;
 
-        const startOfMonth = new Date();
-        startOfMonth.setDate(1);
-        startOfMonth.setHours(0, 0, 0, 0);
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    startOfMonth.setHours(0, 0, 0, 0);
 
-        const monthlyRevenueResult = await Booking.aggregate([
-            { 
-                $match: { 
-                    status: "confirmed", 
-                    createdAt: { $gte: startOfMonth } 
-                } 
-            },
-            { $group: { _id: null, total: { $sum: "$price" } } }
-        ]);
-        const monthlyRevenue = monthlyRevenueResult.length > 0 ? monthlyRevenueResult[0].total : 0;
+    const monthlyRevenueResult = await Booking.aggregate([
+      {
+        $match: {
+          status: "confirmed",
+          createdAt: { $gte: startOfMonth }
+        }
+      },
+      { $group: { _id: null, total: { $sum: "$price" } } }
+    ]);
+    const monthlyRevenue = monthlyRevenueResult.length > 0 ? monthlyRevenueResult[0].total : 0;
 
-        // Updated this part to include more details
+    // Updated this part to include more details
 
-const recentBookings = await Booking.find()
-    .populate('car')   // هنجيب كل بيانات العربية
-    .populate('user')  // هنجيب كل بيانات العميل
-    .populate('owner') // هنجيب كل بيانات المالك
-    .sort({ createdAt: -1 })
-    .limit(10);
-        res.status(200).json({
-            success: true,
-            data: {
-                totalUsers,
-                totalCars,
-                totalBookings,
-                totalRevenue,
-                monthlyRevenue,
-                recentBookings
-            }
-        });
-    } catch (error) {
-        console.error("Error fetching admin stats:", error);
-        res.status(500).json({ success: false, message: "Server Error" });
-    }
+    const recentBookings = await Booking.find()
+      .populate('car')   // هنجيب كل بيانات العربية
+      .populate('user')  // هنجيب كل بيانات العميل
+      .populate('owner') // هنجيب كل بيانات المالك
+      .sort({ createdAt: -1 })
+      .limit(10);
+    res.status(200).json({
+      success: true,
+      data: {
+        totalUsers,
+        totalCars,
+        totalBookings,
+        totalRevenue,
+        monthlyRevenue,
+        recentBookings
+      }
+    });
+  } catch (error) {
+    console.error("Error fetching admin stats:", error);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
 };
 
 export const getAllUsers = async (req, res) => {
@@ -71,5 +71,69 @@ export const deleteUser = async (req, res) => {
     res.status(200).json({ success: true, message: "User deleted successfully" });
   } catch (error) {
     res.status(500).json({ success: false, message: "Failed to delete user", error: error.message });
+  }
+};
+
+export const getAllCars = async (req, res) => {
+  try {
+    const cars = await Car.find().populate('owner', 'name email phone image').sort({ createdAt: -1 });
+    res.status(200).json({ success: true, data: cars });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Failed to fetch cars", error: error.message });
+  }
+};
+
+export const deleteCar = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Car.findByIdAndDelete(id);
+    res.status(200).json({ success: true, message: "Car deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Failed to delete car", error: error.message });
+  }
+};
+
+export const getAllBookings = async (req, res) => {
+  try {
+    const bookings = await Booking.find()
+      .populate('car')
+      .populate('user', 'name email phone')
+      .populate('owner', 'name email phone')
+      .sort({ createdAt: -1 });
+    res.status(200).json({ success: true, data: bookings });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Failed to fetch bookings", error: error.message });
+  }
+};
+
+export const cancelBookingByAdmin = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const booking = await Booking.findById(id);
+    if (!booking) {
+      return res.status(404).json({ success: false, message: "Booking not found" });
+    }
+
+    booking.status = 'cancelled';
+    await booking.save();
+
+    // Also mark car as available if it was confirmed
+    if (booking.car) {
+      await Car.findByIdAndUpdate(booking.car, { isAvaliable: true });
+    }
+
+    res.status(200).json({ success: true, message: "Booking cancelled by admin" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Failed to cancel booking", error: error.message });
+  }
+};
+export const approveCar = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status, rejectionReason } = req.body;
+    const car = await Car.findByIdAndUpdate(id, { status, rejectionReason }, { new: true });
+    res.json({ success: true, message: `Car ${status} successfully`, data: car });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };

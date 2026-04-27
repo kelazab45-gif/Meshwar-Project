@@ -84,7 +84,7 @@ export const updateUserProfile = async (req, res) => {
     try {
         const { _id } = req.user
         const { name, phone, address, dob, gender, nationality, idNumber, emergencyContact, job, licenseNumber, licenseExpiry, city, zipCode, country } = req.body
-        
+
         // Handle Multiple Files
         const files = req.files || {}
         const imageFile = files.image ? files.image[0] : null

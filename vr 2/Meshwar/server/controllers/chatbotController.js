@@ -16,18 +16,18 @@ const buildInventoryContext = (cars) => {
   const unavailable = cars.filter(c => !c.isAvaliable);
 
   // Stats
-  const prices       = cars.map(c => c.pricePerDay);
-  const minPrice     = Math.min(...prices);
-  const maxPrice     = Math.max(...prices);
-  const avgPrice     = (prices.reduce((s, p) => s + p, 0) / prices.length).toFixed(2);
+  const prices = cars.map(c => c.pricePerDay);
+  const minPrice = Math.min(...prices);
+  const maxPrice = Math.max(...prices);
+  const avgPrice = (prices.reduce((s, p) => s + p, 0) / prices.length).toFixed(2);
 
   // Group helpers
   const groupBy = (arr, key) =>
     arr.reduce((acc, c) => { acc[c[key]] = (acc[c[key]] || 0) + 1; return acc; }, {});
 
-  const byCategory    = groupBy(cars, 'category');
-  const byFuel        = groupBy(cars, 'fuel_type');
-  const byTransmission= groupBy(cars, 'transmission');
+  const byCategory = groupBy(cars, 'category');
+  const byFuel = groupBy(cars, 'fuel_type');
+  const byTransmission = groupBy(cars, 'transmission');
 
   // Category price ranges
   const categoryPrices = {};
@@ -52,9 +52,9 @@ SUMMARY:
 - Price range: EGP ${minPrice} – EGP ${maxPrice} per day
 - Average price: EGP ${avgPrice}/day
 - Categories and price ranges: ${categoryRanges}
-- Fuel types: ${Object.entries(byFuel).map(([k,v]) => `${k} (${v})`).join(', ')}
-- Transmissions: ${Object.entries(byTransmission).map(([k,v]) => `${k} (${v})`).join(', ')}
-- Category breakdown: ${Object.entries(byCategory).map(([k,v]) => `${k} (${v})`).join(', ')}
+- Fuel types: ${Object.entries(byFuel).map(([k, v]) => `${k} (${v})`).join(', ')}
+- Transmissions: ${Object.entries(byTransmission).map(([k, v]) => `${k} (${v})`).join(', ')}
+- Category breakdown: ${Object.entries(byCategory).map(([k, v]) => `${k} (${v})`).join(', ')}
 
 FULL CAR LISTING:
 ${carList}
@@ -167,10 +167,10 @@ export const chatWithBot = async (req, res) => {
 export const getQuickActions = async (req, res) => {
   try {
     const quickActions = [
-      { id: 'browse',      label: 'Browse Cars',    icon: '🚗', query: 'Show me all available cars with their prices' },
-      { id: 'cheap',       label: 'Cheapest Cars',  icon: '💸', query: 'What are the cheapest cars available to rent?' },
-      { id: 'categories',  label: 'Categories',     icon: '📋', query: 'What car categories do you offer and what are the prices?' },
-      { id: 'support',     label: 'How to Book',    icon: '🎧', query: 'How do I book a car?' }
+      { id: 'browse', label: 'Browse Cars', icon: '🚗', query: 'Show me all available cars with their prices' },
+      { id: 'cheap', label: 'Cheapest Cars', icon: '💸', query: 'What are the cheapest cars available to rent?' },
+      { id: 'categories', label: 'Categories', icon: '📋', query: 'What car categories do you offer and what are the prices?' },
+      { id: 'support', label: 'How to Book', icon: '🎧', query: 'How do I book a car?' }
     ];
     res.json({ success: true, quickActions });
   } catch (error) {

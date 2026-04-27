@@ -19,13 +19,16 @@ import ChatBot from './components/ChatBot'
 import { Toaster } from 'react-hot-toast'
 import { useAppContext } from './context/AppContext'
 import AdminDashboard from './pages/AdminDashboard'
-import ManageUsers from './pages/ManageUsers' 
+import ManageUsers from './pages/ManageUsers'
 
+import AdminManageCars from './pages/AdminManageCars'
+import AdminTotalBookings from './pages/AdminTotalBookings'
+import AdminSystemSettings from './pages/AdminSystemSettings'
 import AdminLayout from './pages/AdminLayout'
 
 const App = () => {
 
-  const {showLogin} = useAppContext()
+  const { showLogin } = useAppContext()
   const location = useLocation()
   const isOwnerPath = location.pathname.startsWith('/owner')
   const isAdminPath = location.pathname.startsWith('/admin')
@@ -35,38 +38,41 @@ const App = () => {
 
   return (
     <>
-     <Toaster />
-      {showLogin && <Login/>}
+      <Toaster />
+      {showLogin && <Login />}
 
-      {!hideLayoutElements && <Navbar/>}
+      {!hideLayoutElements && <Navbar />}
 
-    <div className={(!hideLayoutElements && !isHome) ? 'pt-16' : ''}>
-    <Routes>
-      <Route path='/' element={<Home/>}/>
-      <Route path='/car-details/:id' element={<CarDetails/>}/>
-      <Route path='/checkout/:id' element={<Checkout/>}/>
-      <Route path='/cars' element={<Cars/>}/>
-      <Route path='/my-bookings' element={<MyBookings/>}/>
-      <Route path='/wallet' element={<Wallet/>}/>
-      <Route path='/my-account' element={<MyAccount/>}/>
-      
-      <Route path='/owner' element={<Layout />}>
-        <Route index element={<Dashboard />}/>
-        <Route path="add-car" element={<AddCar />}/>
-        <Route path="manage-cars" element={<ManageCars />}/>
-        <Route path="manage-bookings" element={<ManageBookings />}/>
-      </Route>
+      <div className={(!hideLayoutElements && !isHome) ? 'pt-16' : ''}>
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/car-details/:id' element={<CarDetails />} />
+          <Route path='/checkout/:id' element={<Checkout />} />
+          <Route path='/cars' element={<Cars />} />
+          <Route path='/my-bookings' element={<MyBookings />} />
+          <Route path='/wallet' element={<Wallet />} />
+          <Route path='/my-account' element={<MyAccount />} />
 
-      <Route path='/admin' element={<AdminLayout />}>
-        <Route index element={<AdminDashboard />}/>
-        <Route path="users" element={<ManageUsers />}/>
-      </Route>
-    </Routes>
-    </div>
+          <Route path='/owner' element={<Layout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="add-car" element={<AddCar />} />
+            <Route path="manage-cars" element={<ManageCars />} />
+            <Route path="manage-bookings" element={<ManageBookings />} />
+          </Route>
 
-    {!hideLayoutElements && <Footer />}
-    
-    <ChatBot />
+          <Route path='/admin' element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path='users' element={<ManageUsers />} />
+            <Route path='cars' element={<AdminManageCars />} />
+            <Route path='bookings' element={<AdminTotalBookings />} />
+            <Route path='settings' element={<AdminSystemSettings />} />
+          </Route>
+        </Routes>
+      </div>
+
+      {!hideLayoutElements && <Footer />}
+
+      <ChatBot />
 
     </>
   )

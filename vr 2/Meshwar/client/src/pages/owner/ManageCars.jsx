@@ -6,21 +6,21 @@ import { motion } from 'motion/react'
 
 const ManageCars = () => {
 
-  const {isOwner, isPremium, user, axios, currency, fetchCars} = useAppContext()
+  const { isOwner, isPremium, user, axios, currency, fetchCars } = useAppContext()
   const [cars, setCars] = useState([])
-  
+
   // Edit State
   const [editingCar, setEditingCar] = useState(null)
   const [editForm, setEditForm] = useState(null)
   const [imageFile, setImageFile] = useState(null)
   const [isUpdating, setIsUpdating] = useState(false)
 
-  const fetchOwnerCars = async ()=>{
+  const fetchOwnerCars = async () => {
     try {
-      const {data} = await axios.get('/api/owner/cars')
-      if(data.success){
+      const { data } = await axios.get('/api/owner/cars')
+      if (data.success) {
         setCars(data.cars)
-      }else{
+      } else {
         toast.error(data.message)
       }
     } catch (error) {
@@ -28,14 +28,14 @@ const ManageCars = () => {
     }
   }
 
-  const toggleAvailability = async (carId)=>{
+  const toggleAvailability = async (carId) => {
     try {
-      const {data} = await axios.post('/api/owner/toggle-car', {carId})
-      if(data.success){
+      const { data } = await axios.post('/api/owner/toggle-car', { carId })
+      if (data.success) {
         toast.success(data.message)
-        fetchOwnerCars()   
-        fetchCars()        
-      }else{
+        fetchOwnerCars()
+        fetchCars()
+      } else {
         toast.error(data.message)
       }
     } catch (error) {
@@ -43,17 +43,17 @@ const ManageCars = () => {
     }
   }
 
-  const deleteCar = async (carId)=>{
+  const deleteCar = async (carId) => {
     try {
       const confirm = window.confirm('Are you sure you want to permanently delete this car from your collection?')
-      if(!confirm) return null
+      if (!confirm) return null
 
-      const {data} = await axios.post('/api/owner/delete-car', {carId})
-      if(data.success){
+      const { data } = await axios.post('/api/owner/delete-car', { carId })
+      if (data.success) {
         toast.success(data.message)
-        fetchOwnerCars()   
-        fetchCars()        
-      }else{
+        fetchOwnerCars()
+        fetchCars()
+      } else {
         toast.error(data.message)
       }
     } catch (error) {
@@ -104,36 +104,36 @@ const ManageCars = () => {
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     if (user && (isOwner || isPremium || user.isPremium)) {
       fetchOwnerCars()
     }
-  },[user, isOwner, isPremium])
+  }, [user, isOwner, isPremium])
 
   return (
     <div className='px-4 pt-10 md:px-10 w-full min-h-screen bg-[#F9FAFB] pb-10 relative'>
-      
+
       <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Manage Cars</h1>
           <p className="text-sm text-gray-500 mt-1">View, update details, or toggle availability of your listed cars.</p>
         </div>
         <div className="flex items-center gap-3">
-            <div className="bg-white px-4 py-2 rounded-lg border border-gray-200 shadow-sm text-sm font-medium text-gray-700">
-                <span className="text-gray-400 mr-2">Total Cars:</span> 
-                {cars.length}
-            </div>
+          <div className="bg-white px-4 py-2 rounded-lg border border-gray-200 shadow-sm text-sm font-medium text-gray-700">
+            <span className="text-gray-400 mr-2">Total Cars:</span>
+            {cars.length}
+          </div>
         </div>
       </div>
 
       {cars.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-64 bg-white rounded-xl border border-gray-200 shadow-sm">
-           <svg className="w-12 h-12 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
-           <h3 className="text-sm font-medium text-gray-900">No cars found</h3>
-           <p className="text-sm text-gray-500 mt-1">You haven't added any cars to your collection yet.</p>
+          <svg className="w-12 h-12 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+          <h3 className="text-sm font-medium text-gray-900">No cars found</h3>
+          <p className="text-sm text-gray-500 mt-1">You haven't added any cars to your collection yet.</p>
         </div>
       ) : (
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
@@ -151,13 +151,13 @@ const ManageCars = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {cars.map((car, index)=>(
+                {cars.map((car, index) => (
                   <tr key={index} className="hover:bg-gray-50/50 transition-colors group">
-                    
+
                     {/* Car Info */}
                     <td className="py-4 px-6 whitespace-nowrap">
                       <div className="flex items-center">
-                        <img src={car.image} alt="" className="h-10 w-16 object-cover rounded shadow-sm border border-gray-100 mr-4"/>
+                        <img src={car.image} alt="" className="h-10 w-16 object-cover rounded shadow-sm border border-gray-100 mr-4" />
                         <div>
                           <div className="text-sm font-medium text-gray-900">{car.brand} {car.model}</div>
                           <div className="text-xs text-gray-500">{car.year} • {car.transmission} • {car.seating_capacity} Seats</div>
@@ -182,8 +182,8 @@ const ManageCars = () => {
                     {/* Status */}
                     <td className="py-4 px-6 whitespace-nowrap">
                       <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold tracking-wide
-                        ${car.isAvaliable ? 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/20' : 
-                        'bg-rose-50 text-rose-700 ring-1 ring-inset ring-rose-600/10'}`}>
+                        ${car.isAvaliable ? 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/20' :
+                          'bg-rose-50 text-rose-700 ring-1 ring-inset ring-rose-600/10'}`}>
                         {car.isAvaliable ? (
                           <><span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span> Available</>
                         ) : (
@@ -194,8 +194,8 @@ const ManageCars = () => {
 
                     {/* Actions */}
                     <td className="py-4 px-6 whitespace-nowrap text-right flex justify-end items-center gap-2">
-                      <button 
-                        onClick={()=> toggleAvailability(car._id)} 
+                      <button
+                        onClick={() => toggleAvailability(car._id)}
                         title={car.isAvaliable ? "Mark Unavailable" : "Mark Available"}
                         className="p-1.5 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
                       >
@@ -205,17 +205,17 @@ const ManageCars = () => {
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                         )}
                       </button>
-                      
-                      <button 
-                        onClick={()=> openEditModal(car)} 
+
+                      <button
+                        onClick={() => openEditModal(car)}
                         title="Edit Car"
                         className="p-1.5 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
                       >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                       </button>
 
-                      <button 
-                        onClick={()=> deleteCar(car._id)} 
+                      <button
+                        onClick={() => deleteCar(car._id)}
                         title="Delete Car"
                         className="p-1.5 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
                       >
@@ -234,7 +234,7 @@ const ManageCars = () => {
       {/* Edit Modal (Polished) */}
       {editingCar && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col"
@@ -251,15 +251,15 @@ const ManageCars = () => {
 
             <div className="overflow-y-auto p-6">
               <form id="edit-car-form" onSubmit={handleEditSubmit} className="flex flex-col gap-6 text-sm">
-                
+
                 {/* Image Section */}
                 <div className='flex items-center gap-5 p-4 rounded-xl border border-gray-100 bg-gray-50/50'>
                   <label htmlFor="edit-car-image" className="relative cursor-pointer group shrink-0">
-                    <img src={imageFile ? URL.createObjectURL(imageFile) : editingCar.image} alt="" className='h-20 w-32 object-cover rounded-lg border border-gray-200 shadow-sm'/>
+                    <img src={imageFile ? URL.createObjectURL(imageFile) : editingCar.image} alt="" className='h-20 w-32 object-cover rounded-lg border border-gray-200 shadow-sm' />
                     <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg backdrop-blur-[2px]">
                       <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                     </div>
-                    <input type="file" id="edit-car-image" accept="image/*" hidden onChange={e=> setImageFile(e.target.files[0])}/>
+                    <input type="file" id="edit-car-image" accept="image/*" hidden onChange={e => setImageFile(e.target.files[0])} />
                   </label>
                   <div>
                     <h4 className="font-medium text-gray-900 mb-1">Car Cover Image</h4>
@@ -269,30 +269,30 @@ const ManageCars = () => {
 
                 {/* Form Grid */}
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5'>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">Brand</label>
-                    <input type="text" required className='w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-gray-900' value={editForm.brand} onChange={e=> setEditForm({...editForm, brand: e.target.value})}/>
+                    <input type="text" required className='w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-gray-900' value={editForm.brand} onChange={e => setEditForm({ ...editForm, brand: e.target.value })} />
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">Model</label>
-                    <input type="text" required className='w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-gray-900' value={editForm.model} onChange={e=> setEditForm({...editForm, model: e.target.value})}/>
+                    <input type="text" required className='w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-gray-900' value={editForm.model} onChange={e => setEditForm({ ...editForm, model: e.target.value })} />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">Year</label>
-                    <input type="number" required className='w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-gray-900' value={editForm.year} onChange={e=> setEditForm({...editForm, year: e.target.value})}/>
+                    <input type="number" required className='w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-gray-900' value={editForm.year} onChange={e => setEditForm({ ...editForm, year: e.target.value })} />
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">Daily Rate ({currency})</label>
-                    <input type="number" required className='w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-gray-900' value={editForm.pricePerDay} onChange={e=> setEditForm({...editForm, pricePerDay: e.target.value})}/>
+                    <input type="number" required className='w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-gray-900' value={editForm.pricePerDay} onChange={e => setEditForm({ ...editForm, pricePerDay: e.target.value })} />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">Category</label>
-                    <select value={editForm.category} onChange={e=> setEditForm({...editForm, category: e.target.value})} className='w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-gray-900'>
+                    <select value={editForm.category} onChange={e => setEditForm({ ...editForm, category: e.target.value })} className='w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-gray-900'>
                       <option value="Sedan">Sedan</option>
                       <option value="SUV">SUV</option>
                       <option value="Coupe">Coupe</option>
@@ -303,7 +303,7 @@ const ManageCars = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">Location</label>
-                    <select value={editForm.location} onChange={e=> setEditForm({...editForm, location: e.target.value})} className='w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-gray-900'>
+                    <select value={editForm.location} onChange={e => setEditForm({ ...editForm, location: e.target.value })} className='w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-gray-900'>
                       <option value="Mansoura">Mansoura</option>
                       <option value="Cairo">Cairo</option>
                       <option value="Hurghada">Hurghada</option>
@@ -314,7 +314,7 @@ const ManageCars = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">Transmission</label>
-                    <select value={editForm.transmission} onChange={e=> setEditForm({...editForm, transmission: e.target.value})} className='w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-gray-900'>
+                    <select value={editForm.transmission} onChange={e => setEditForm({ ...editForm, transmission: e.target.value })} className='w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-gray-900'>
                       <option value="Automatic">Automatic</option>
                       <option value="Manual">Manual</option>
                       <option value="Semi-Automatic">Semi-Automatic</option>
@@ -323,7 +323,7 @@ const ManageCars = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">Fuel Type</label>
-                    <select value={editForm.fuel_type} onChange={e=> setEditForm({...editForm, fuel_type: e.target.value})} className='w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-gray-900'>
+                    <select value={editForm.fuel_type} onChange={e => setEditForm({ ...editForm, fuel_type: e.target.value })} className='w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-gray-900'>
                       <option value="Gas">Gas</option>
                       <option value="Diesel">Diesel</option>
                       <option value="Petrol">Petrol</option>
@@ -334,12 +334,12 @@ const ManageCars = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">Seats</label>
-                    <input type="number" required className='w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-gray-900' value={editForm.seating_capacity} onChange={e=> setEditForm({...editForm, seating_capacity: e.target.value})}/>
+                    <input type="number" required className='w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-gray-900' value={editForm.seating_capacity} onChange={e => setEditForm({ ...editForm, seating_capacity: e.target.value })} />
                   </div>
 
                   <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">Description</label>
-                    <textarea rows={3} required className='w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-gray-900 resize-none' value={editForm.description} onChange={e=> setEditForm({...editForm, description: e.target.value})}></textarea>
+                    <textarea rows={3} required className='w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-gray-900 resize-none' value={editForm.description} onChange={e => setEditForm({ ...editForm, description: e.target.value })}></textarea>
                   </div>
 
                 </div>

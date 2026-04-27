@@ -228,12 +228,12 @@ const MyBookings = () => {
                         </div>
 
                         <span className={`relative overflow-hidden px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.1em] rounded-full flex items-center gap-2 transition-all duration-500 shadow-sm border ${booking.status === 'confirmed'
-                            ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20 shadow-emerald-500/5'
-                            : booking.status === 'cancelled'
-                              ? 'bg-slate-500/10 text-slate-600 border-slate-500/20'
-                              : booking.status === 'rejected'
-                                ? 'bg-rose-500/10 text-rose-600 border-rose-500/20 shadow-rose-500/5'
-                                : 'bg-amber-500/10 text-amber-600 border-amber-500/20 shadow-amber-500/5'
+                          ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20 shadow-emerald-500/5'
+                          : booking.status === 'cancelled'
+                            ? 'bg-slate-500/10 text-slate-600 border-slate-500/20'
+                            : booking.status === 'rejected'
+                              ? 'bg-rose-500/10 text-rose-600 border-rose-500/20 shadow-rose-500/5'
+                              : 'bg-amber-500/10 text-amber-600 border-amber-500/20 shadow-amber-500/5'
                           }`}>
                           {/* Glossy Shimmer Effect */}
                           <span className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent pointer-events-none" />
@@ -254,8 +254,8 @@ const MyBookings = () => {
 
                       {booking.status === 'cancelled' && booking.cancellationReason && (
                         <div className="px-5 py-3 bg-rose-50/50 border-t border-rose-100/50 flex items-start gap-3">
-                            <svg className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                            <p className="text-[11px] font-bold text-rose-600 leading-relaxed italic">{booking.cancellationReason}</p>
+                          <svg className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                          <p className="text-[11px] font-bold text-rose-600 leading-relaxed italic">{booking.cancellationReason}</p>
                         </div>
                       )}
                     </div>

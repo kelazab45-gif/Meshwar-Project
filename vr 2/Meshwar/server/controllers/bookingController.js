@@ -79,7 +79,7 @@ export const createBooking = async (req, res) => {
     try {
         const { _id } = req.user;
         const { car, pickupDate, returnDate, paymentMethod } = req.body;
-        
+
         // Server-side validation for dates
         const picked = new Date(pickupDate);
         const returned = new Date(returnDate);
